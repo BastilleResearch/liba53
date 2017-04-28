@@ -1,4 +1,4 @@
-DESTDIR := 
+DESTDIR := /opt/local
 
 SOURCE_FILES=a5.c bits.c gea.c kasumi.c utils.c ifc.cpp
 OBJECT_FILES=a5.o bits.o gea.o kasumi.o utils.o ifc.o
@@ -7,20 +7,20 @@ INCLUDE_FILES=a5.h bits.h gea.h gprs_cipher.h kasumi.h linuxlist.h utils.h
 # build A5/3 library
 liba53.so.1.0: ${SOURCE_FILES} ${INCLUDE_FILES} Makefile
 	g++ -O3 -Wall -fPIC -c ${SOURCE_FILES}
-	g++ -shared -Wl,-soname,liba53.so.1 -o liba53.so.1.0 ${OBJECT_FILES}
+	g++ -shared -Wl,-install_name,liba53.so.1 -o liba53.so.1.0 ${OBJECT_FILES}
 	ln -sf liba53.so.1.0 liba53.so.1
 	ln -sf liba53.so.1.0 liba53.so
 
 # install A5/3 library
 install: liba53.so.1.0
-	cp liba53.so.1.0 $(DESTDIR)/usr/lib
-	cp -P liba53.so.1 $(DESTDIR)/usr/lib
-	cp -P liba53.so $(DESTDIR)/usr/lib
-	cp a53.h $(DESTDIR)/usr/include
+	cp liba53.so.1.0 $(DESTDIR)/lib
+	cp -P liba53.so.1 $(DESTDIR)/lib
+	cp -P liba53.so $(DESTDIR)/lib
+	cp a53.h $(DESTDIR)/include
 
 # test installed A5/3 library
 installtest: install
-	g++ -o a53test a53test.cpp -I$(DESTDIR)/usr/include -L$(DESTDIR)/usr/lib -la53
+	g++ -o a53test a53test.cpp -I$(DESTDIR)/include -L$(DESTDIR)/lib -la53
 	./a53test
 
 clean:
